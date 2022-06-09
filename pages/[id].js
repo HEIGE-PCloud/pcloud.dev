@@ -5,7 +5,7 @@ import Link from "next/link";
 import { databaseId } from "./index.js";
 import styles from "./post.module.css";
 import { Text } from "../components/Text";
-import { PDF } from "../components/Pdf";
+import { PDF } from "../components/PDF";
 
 const renderNestedList = (block) => {
   const { type } = block;
