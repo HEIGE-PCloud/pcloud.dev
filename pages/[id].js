@@ -4,36 +4,8 @@ import { getDatabase, getPage, getBlocks } from "../lib/notion";
 import Link from "next/link";
 import { databaseId } from "./index.js";
 import styles from "./post.module.css";
-
-export function Text({ text }) {
-  if (!text) {
-    return null;
-  }
-  return text.map((value, index) => {
-    const {
-      annotations: { bold, code, color, italic, strikethrough, underline },
-      text,
-    } = value;
-    if (!text) {
-      return
-    }
-    return (
-      <span
-        key={index}
-        className={[
-          bold ? styles.bold : "",
-          code ? styles.code : "",
-          italic ? styles.italic : "",
-          strikethrough ? styles.strikethrough : "",
-          underline ? styles.underline : "",
-        ].join(" ")}
-        style={color !== "default" ? { color } : {}}
-      >
-        {text.link ? <a href={text.link.url}>{text.content}</a> : text.content}
-      </span>
-    );
-  });
-};
+import { Text } from "../components/Text";
+import { PDF } from "../components/Pdf";
 
 const renderNestedList = (block) => {
   const { type } = block;
@@ -161,6 +133,11 @@ const renderBlock = (block) => {
           { href }
         </a>
       );
+    case 'pdf':
+      console.log(value)
+      return (
+        <PDF url={value.file.url}/>
+      )
     default:
       return `❌ Unsupported block (${
         type === "unsupported" ? "unsupported by Notion API" : type
