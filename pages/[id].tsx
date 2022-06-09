@@ -1,8 +1,8 @@
 import { Fragment } from "react";
-import Head from "next/head";
+import Head from "../node_modules/next/head";
 import { getDatabase, getPage, getBlocks } from "../lib/notion";
-import Link from "next/link";
-import { databaseId } from "./index.js";
+import Link from "../node_modules/next/link";
+import { databaseId } from "./index";
 import styles from "./post.module.css";
 import { Text } from "../components/Text";
 import { PDF } from "../components/PDF";
