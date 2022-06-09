@@ -134,7 +134,6 @@ const renderBlock = (block) => {
         </a>
       );
     case 'pdf':
-      console.log(value)
       return (
         <PDF url={value.file.url}/>
       )
