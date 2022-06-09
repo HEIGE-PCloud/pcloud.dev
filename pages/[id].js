@@ -100,15 +100,10 @@ const renderBlock = (block) => {
     case "divider":
       return <hr key={id} />;
     case "quote":
-      return <blockquote key={id}>{value.text[0].plain_text}</blockquote>;
-    case "code":
       return (
-        <pre className={styles.pre}>
-          <code className={styles.code_block} key={id}>
-            {value.text[0].plain_text}
-          </code>
-        </pre>
-      );
+      <blockquote key={id}>
+        <Text text={value.rich_text}/>
+      </blockquote>)
     case "file":
       const src_file =
         value.type === "external" ? value.external.url : value.file.url;
