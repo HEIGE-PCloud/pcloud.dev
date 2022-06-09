@@ -5,7 +5,7 @@ import Link from "next/link";
 import { databaseId } from "./index.js";
 import styles from "./post.module.css";
 
-export const Text = ({ text }) => {
+export function Text({ text }) {
   if (!text) {
     return null;
   }
@@ -14,6 +14,9 @@ export const Text = ({ text }) => {
       annotations: { bold, code, color, italic, strikethrough, underline },
       text,
     } = value;
+    if (!text) {
+      return
+    }
     return (
       <span
         className={[
