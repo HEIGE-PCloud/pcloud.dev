@@ -4,8 +4,6 @@ export function PDF({ url }) {
         <embed
             src={url}
             type="application/pdf"
-            frameBorder="0"
-            scrolling="auto"
             height="100%"
             width="100%"
             className={styles.pdf}

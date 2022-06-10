@@ -1,13 +1,16 @@
-import { Fragment } from "react";
-import Head from "../node_modules/next/head";
-import { getDatabase, getPage, getBlocks } from "../lib/notion";
-import Link from "../node_modules/next/link";
-import { databaseId } from "./index";
-import styles from "./post.module.css";
-import { Text } from "../components/Text";
-import { PDF } from "../components/PDF";
+import { Fragment } from "react"
+import Head from "next/head"
+import { getDatabase, getPage, getBlocks } from "../lib/notion"
+import Link from "next/link"
+import { databaseId } from "./index"
+import styles from "./post.module.css"
+import { Text } from "../components/Text"
+import { PDF } from "../components/PDF"
+import Image from 'next/image'
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 
-const renderNestedList = (block) => {
+
+function renderNestedList(block) {
   const { type } = block;
   const value = block[type];
   if (!value) return null;
@@ -28,7 +31,7 @@ const renderNestedList = (block) => {
   )
 }
 
-const renderBlock = (block) => {
+function renderBlock(block) {
   const { type, id } = block;
   const value = block[type];
 
@@ -36,32 +39,32 @@ const renderBlock = (block) => {
     case "paragraph":
       return (
         <p>
-          <Text text={value.text} />
+          <Text text={value.rich_text} />
         </p>
       );
     case "heading_1":
       return (
         <h1>
-          <Text text={value.text} />
+          <Text text={value.rich_text} />
         </h1>
       );
     case "heading_2":
       return (
         <h2>
-          <Text text={value.text} />
+          <Text text={value.rich_text} />
         </h2>
       );
     case "heading_3":
       return (
         <h3>
-          <Text text={value.text} />
+          <Text text={value.rich_text} />
         </h3>
       );
     case "bulleted_list_item":
     case "numbered_list_item":
       return (
         <li>
-          <Text text={value.text} />
+          <Text text={value.rich_text} />
           {!!value.children && renderNestedList(block)}
         </li>
       );
@@ -70,7 +73,7 @@ const renderBlock = (block) => {
         <div>
           <label htmlFor={id}>
             <input type="checkbox" id={id} defaultChecked={value.checked} />{" "}
-            <Text text={value.text} />
+            <Text text={value.rich_text} />
           </label>
         </div>
       );
@@ -78,7 +81,7 @@ const renderBlock = (block) => {
       return (
         <details>
           <summary>
-            <Text text={value.text} />
+            <Text text={value.rich_text} />
           </summary>
           {value.children?.map((block) => (
             <Fragment key={block.id}>{renderBlock(block)}</Fragment>
@@ -92,6 +95,7 @@ const renderBlock = (block) => {
         value.type === "external" ? value.external.url : value.file.url;
       const caption = value.caption ? value.caption[0]?.plain_text : "";
       return (
+          // <Image src={src} width={500} height={500} alt={caption}/>
         <figure>
           <img src={src} alt={caption} />
           {caption && <figcaption>{caption}</figcaption>}
@@ -101,9 +105,9 @@ const renderBlock = (block) => {
       return <hr key={id} />;
     case "quote":
       return (
-      <blockquote key={id}>
-        <Text text={value.rich_text}/>
-      </blockquote>)
+        <blockquote key={id}>
+          <Text text={value.rich_text} />
+        </blockquote>)
     case "file":
       const src_file =
         value.type === "external" ? value.external.url : value.file.url;
@@ -124,18 +128,17 @@ const renderBlock = (block) => {
     case "bookmark":
       const href = value.url
       return (
-        <a href={ href } target="_brank" className={styles.bookmark}>
-          { href }
+        <a href={href} target="_brank" className={styles.bookmark}>
+          {href}
         </a>
       );
     case 'pdf':
       return (
-        <PDF url={value.file.url}/>
+        <PDF url={value.file.url} />
       )
     default:
-      return `❌ Unsupported block (${
-        type === "unsupported" ? "unsupported by Notion API" : type
-      })`;
+      return `❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type
+        })`;
   }
 };
 
@@ -167,15 +170,15 @@ export default function Post({ page, blocks }) {
   );
 }
 
-export const getStaticPaths = async () => {
+export async function getStaticPaths() {
   const database = await getDatabase(databaseId);
   return {
     paths: database.map((page) => ({ params: { id: page.id } })),
-    fallback: true,
+    fallback: true
   };
 };
 
-export const getStaticProps = async (context) => {
+export async function getStaticProps(context) {
   const { id } = context.params;
   const page = await getPage(id);
   const blocks = await getBlocks(id);
