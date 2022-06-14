@@ -1,7 +1,7 @@
-import styles from "./Text.module.css";
+import styles from "./RichText.module.css";
 
 
-export function Text({ text }) {
+export function RichText({ text }) {
   if (!text) {
     return null;
   }

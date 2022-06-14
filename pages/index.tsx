@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { getDatabase } from "../lib/notion";
-import { Text } from "../components/Text";
+import { RichText } from "../components/RichText";
 import styles from "./index.module.css";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
@@ -80,7 +80,7 @@ export default function Home({ posts }) {
                 <h3 className={styles.postTitle}>
                   <Link href={`/${post.id}`}>
                     <a>
-                      <Text text={post.properties.Name.title} />
+                      <RichText text={post.properties.Name.title} />
                     </a>
                   </Link>
                 </h3>
