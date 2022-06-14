@@ -1,15 +1,15 @@
-import { Client } from "@notionhq/client";
-import { GetPageResponse } from "@notionhq/client/build/src/api-endpoints";
+import { Client, isNotionClientError } from "@notionhq/client";
+import { GetPageResponse, GetBlockResponse, QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
 
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-export async function getDatabase(databaseId: string) {
+export async function getDatabase(databaseId: string): Promise<QueryDatabaseResponse> {
   const response = await notion.databases.query({
     database_id: databaseId,
   });
-  return response.results;
+  return response;
 };
 
 export async function getPage(pageId: string): Promise<GetPageResponse> {
@@ -17,16 +17,16 @@ export async function getPage(pageId: string): Promise<GetPageResponse> {
   return response;
 };
 
-export async function getBlocks(blockId: string) {
-  const blocks = [];
-  let cursor: string;
+export async function getBlockChildren(blockId: string): Promise<GetBlockResponse[]> {
+  const blocks: GetBlockResponse[] = [];
+  let cursor: string | undefined = undefined;
   while (true) {
-    const { results, next_cursor } = await notion.blocks.children.list({
+    const { results, has_more, next_cursor } = await notion.blocks.children.list({
       start_cursor: cursor,
       block_id: blockId,
     });
     blocks.push(...results);
-    if (!next_cursor) {
+    if (!has_more) {
       break;
     }
     cursor = next_cursor;

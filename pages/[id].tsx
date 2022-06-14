@@ -1,14 +1,11 @@
 import { Fragment } from "react"
 import Head from "next/head"
-import { getDatabase, getPage, getBlocks } from "../lib/notion"
+import { getDatabase, getPage, getBlockChildren } from "../lib/notion"
 import Link from "next/link"
 import { databaseId } from "./index"
 import styles from "./post.module.css"
 import { Text } from "../components/Text"
 import { PDF } from "../components/PDF"
-import Image from 'next/image'
-import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
-
 
 function renderNestedList(block) {
   const { type } = block;
@@ -95,12 +92,11 @@ function renderBlock(block) {
         value.type === "external" ? value.external.url : value.file.url;
       const caption = value.caption ? value.caption[0]?.plain_text : "";
       return (
-          // <Image src={src} width={500} height={500} alt={caption}/>
         <figure>
           <img src={src} alt={caption} />
           {caption && <figcaption>{caption}</figcaption>}
         </figure>
-      );
+      )
     case "divider":
       return <hr key={id} />;
     case "quote":
@@ -171,7 +167,7 @@ export default function Post({ page, blocks }) {
 }
 
 export async function getStaticPaths() {
-  const database = await getDatabase(databaseId);
+  const database = (await getDatabase(databaseId)).results;
   return {
     paths: database.map((page) => ({ params: { id: page.id } })),
     fallback: true
@@ -181,21 +177,20 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   const { id } = context.params;
   const page = await getPage(id);
-  const blocks = await getBlocks(id);
-
+  const blocks = await getBlockChildren(id);
   // Retrieve block children for nested blocks (one level deep), for example toggle blocks
   // https://developers.notion.com/docs/working-with-page-content#reading-nested-blocks
   const childBlocks = await Promise.all(
     blocks
-      .filter((block) => block.has_children)
+      .filter((block: any) => block.has_children)
       .map(async (block) => {
         return {
           id: block.id,
-          children: await getBlocks(block.id),
+          children: await getBlockChildren(block.id),
         };
       })
   );
-  const blocksWithChildren = blocks.map((block) => {
+  const blocksWithChildren = blocks.map((block: any) => {
     // Add child blocks if the block should contain children but none exists
     if (block.has_children && !block[block.type].children) {
       block[block.type]["children"] = childBlocks.find(
