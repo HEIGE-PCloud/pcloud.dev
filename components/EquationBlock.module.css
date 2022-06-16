@@ -1,14 +1,14 @@
 /* Enable line break */
 .blockEquation :global(.katex-display > .katex) {
-    white-space: normal;
+  white-space: normal;
 }
 
 /* Add space between broken lines: */
 .blockEquation :global(.katex-display > .base) {
-    margin: 0.25em 0;
+  margin: 0.25em 0;
 }
 
 /* Compensate by reducing space around display math */
 .blockEquation :global(.katex-display) {
-    margin: 0.5em 0;
+  margin: 0.5em 0;
 }
