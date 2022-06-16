@@ -10,6 +10,7 @@ import Image from '../components/Image'
 import { getPlaiceholder } from 'plaiceholder'
 import EquationBlock from '../components/EquationBlock'
 import copyTeX from '../lib/copyTeX'
+import VideoBlock from '../components/VideoBlock'
 
 function renderNestedList(block) {
   const { type } = block
@@ -130,6 +131,8 @@ function renderBlock(block) {
       return <PDF url={value.file.url} />
     case 'equation':
       return <EquationBlock expression={value.expression} displayMode={true} />
+    case 'video':
+      return <VideoBlock video={value} />
     default:
       return `❌ Unsupported block (${
         type === 'unsupported' ? 'unsupported by Notion API' : type
