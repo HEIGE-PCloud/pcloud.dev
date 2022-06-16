@@ -171,7 +171,7 @@ export default function Post({ page, blocks }) {
             <Link href="/">
               <a className={styles.back}>← Go home</a>
             </Link>
-            <a href={page.url} rel='noreferrer' target='_blank'>Notion source</a>
+            <a href={page.url.replace('www.notion.so', 'pcloud.notion.site')} rel='noreferrer' target='_blank'>Notion source</a>
           </div>
         </section>
       </article>
