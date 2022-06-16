@@ -12,7 +12,7 @@ interface EquationProps {
 export default function EquationBlock({
   expression,
   displayMode,
-  className,
+  className
 }: EquationProps) {
   if (displayMode) {
     return (
@@ -21,8 +21,8 @@ export default function EquationBlock({
         dangerouslySetInnerHTML={{
           __html: katex.renderToString(expression, {
             throwOnError: false,
-            displayMode,
-          }),
+            displayMode
+          })
         }}
       ></div>
     )
@@ -33,8 +33,8 @@ export default function EquationBlock({
         dangerouslySetInnerHTML={{
           __html: katex.renderToString(expression, {
             throwOnError: false,
-            displayMode,
-          }),
+            displayMode
+          })
         }}
       ></span>
     )
