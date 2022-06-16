@@ -14,3 +14,8 @@ export type ExternalFileObject = {
 }
 
 export type FileObject = NotionFileObject | ExternalFileObject
+
+export type EmojiObject = {
+  type: 'emoji'
+  emoji: string
+}
