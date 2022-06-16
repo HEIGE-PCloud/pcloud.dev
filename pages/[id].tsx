@@ -1,16 +1,16 @@
 import { Fragment } from 'react'
 import Head from 'next/head'
-import { getDatabase, getPage, getBlockChildren } from '../lib/notion'
+import { getDatabase, getPage, getPageBlocks } from '../lib/notion'
 import Link from 'next/link'
 import { databaseId } from './index'
 import styles from './post.module.css'
 import { RichText } from '../components/RichText'
 import { PDF } from '../components/PDFBlock'
 import Image from '../components/ImageBlock'
-import { getPlaiceholder } from 'plaiceholder'
 import EquationBlock from '../components/EquationBlock'
 import copyTeX from '../lib/copyTeX'
 import VideoBlock from '../components/VideoBlock'
+import { BlockObjectResponse } from '../lib/notionTypes'
 
 function renderNestedList(block) {
   const { type } = block
@@ -25,33 +25,33 @@ function renderNestedList(block) {
   return <ul>{value.children.map((block) => renderBlock(block))}</ul>
 }
 
-function renderBlock(block) {
+function renderBlock(block: BlockObjectResponse) {
   const { type, id } = block
   const value = block[type]
 
-  switch (type) {
+  switch (block.type) {
     case 'paragraph':
       return (
         <p>
-          <RichText text={value.rich_text} />
+          <RichText text={block.paragraph.rich_text} />
         </p>
       )
     case 'heading_1':
       return (
         <h1>
-          <RichText text={value.rich_text} />
+          <RichText text={block.heading_1.rich_text} />
         </h1>
       )
     case 'heading_2':
       return (
         <h2>
-          <RichText text={value.rich_text} />
+          <RichText text={block.heading_2.rich_text} />
         </h2>
       )
     case 'heading_3':
       return (
         <h3>
-          <RichText text={value.rich_text} />
+          <RichText text={block.heading_3.rich_text} />
         </h3>
       )
     case 'bulleted_list_item':
@@ -188,47 +188,13 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   const { id } = context.params
   const page = await getPage(id)
-  const blocks = await getBlockChildren(id)
-  // Retrieve block children for nested blocks (one level deep), for example toggle blocks
-  // https://developers.notion.com/docs/working-with-page-content#reading-nested-blocks
-  const childBlocks = await Promise.all(
-    blocks
-      .filter((block) => block.has_children)
-      .map(async (block) => {
-        return {
-          id: block.id,
-          children: await getBlockChildren(block.id)
-        }
-      })
-  )
-  const blocksWithChildren = blocks.map((block) => {
-    // Add child blocks if the block should contain children but none exists
-    if (block.has_children && !block[block.type].children) {
-      block[block.type]['children'] = childBlocks.find(
-        (x) => x.id === block.id
-      )?.children
-    }
-    return block
-  })
-
-  const blocksWithImage = await Promise.all(
-    blocksWithChildren.map(async (block) => {
-      if (block.type === 'image') {
-        const imageUrl = block.image[block.image.type].url
-        const { base64, img } = await getPlaiceholder(imageUrl)
-        block.image.blurDataURL = base64
-        block.image.width = img.width
-        block.image.height = img.height
-        block.image.src = img.src
-      }
-      return block
-    })
-  )
+  const blocks = await getPageBlocks(id)
+  // console.log(blocks)
 
   return {
     props: {
       page,
-      blocks: blocksWithImage
+      blocks: blocks
     },
     revalidate: 1
   }

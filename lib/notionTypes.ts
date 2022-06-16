@@ -5024,7 +5024,7 @@ export type UnsupportedBlock = {
   archived: boolean
 }
 
-export type BlockObjectResponse =
+export type BlockObjectResponse = (
   | ParagraphBlock
   | Heading1Block
   | Heading2Block
@@ -5058,6 +5058,9 @@ export type BlockObjectResponse =
   | AudioBlock
   | LinkPreviewBlock
   | UnsupportedBlock
+) & {
+  children?: BlockObjectResponse[]
+}
 
 type DateRequest = {
   start: string
