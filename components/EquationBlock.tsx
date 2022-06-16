@@ -1,6 +1,6 @@
 import katex from 'katex'
 import 'katex/dist/katex.css'
-require('katex/contrib/mhchem')
+import 'katex/contrib/mhchem'
 
 interface EquationProps {
     expression: string,
