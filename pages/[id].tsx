@@ -8,6 +8,7 @@ import { RichText } from "../components/RichText"
 import { PDF } from "../components/PDF"
 import Image from '../components/Image'
 import { getPlaiceholder } from "plaiceholder"
+import EquationBlock from "../components/EquationBlock"
 
 function renderNestedList(block) {
   const { type } = block;
@@ -133,6 +134,10 @@ function renderBlock(block) {
     case 'pdf':
       return (
         <PDF url={value.file.url} />
+      )
+    case 'equation':
+      return (
+        <EquationBlock expression={value.expression}/>
       )
     default:
       return `❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type
