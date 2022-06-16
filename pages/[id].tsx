@@ -132,7 +132,7 @@ function renderBlock(block) {
     case 'equation':
       return <EquationBlock expression={value.expression} displayMode={true} />
     case 'video':
-      return <VideoBlock video={value} />
+      return <VideoBlock block={block} />
     default:
       return `❌ Unsupported block (${
         type === 'unsupported' ? 'unsupported by Notion API' : type
