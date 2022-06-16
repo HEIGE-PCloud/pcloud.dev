@@ -9,6 +9,7 @@ import { PDF } from "../components/PDF"
 import Image from '../components/Image'
 import { getPlaiceholder } from "plaiceholder"
 import EquationBlock from "../components/EquationBlock"
+import copyTeX from '../lib/copyTeX'
 
 function renderNestedList(block) {
   const { type } = block;
@@ -93,12 +94,12 @@ function renderBlock(block) {
     case "image":
       return (
         // eslint-disable-next-line jsx-a11y/alt-text
-        <Image 
+        <Image
           src={value.src}
           alt={value.caption ? value.caption[0]?.plain_text : ""}
-          height={value.height} 
-          width={value.width} 
-          blurDataURL={value.blurDataURL}/>
+          height={value.height}
+          width={value.width}
+          blurDataURL={value.blurDataURL} />
       )
     case "divider":
       return <hr key={id} />;
@@ -137,7 +138,7 @@ function renderBlock(block) {
       )
     case 'equation':
       return (
-        <EquationBlock expression={value.expression} displayMode={true}/>
+        <EquationBlock expression={value.expression} displayMode={true} />
       )
     default:
       return `❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type
@@ -156,7 +157,9 @@ export default function Post({ page, blocks }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <article className={styles.container}>
+      <article
+        onCopy={copyTeX}
+        className={styles.container}>
         <h1 className={styles.name}>
           <RichText text={page.properties.Name.title} />
         </h1>
