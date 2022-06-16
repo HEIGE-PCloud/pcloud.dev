@@ -6,6 +6,8 @@ import { databaseId } from "./index"
 import styles from "./post.module.css"
 import { RichText } from "../components/RichText"
 import { PDF } from "../components/PDF"
+import Image from 'next/image'
+import { getPlaiceholder } from "plaiceholder"
 
 function renderNestedList(block) {
   const { type } = block;
@@ -88,12 +90,12 @@ function renderBlock(block) {
     case "child_page":
       return <p>{value.title}</p>;
     case "image":
-      const src =
-        value.type === "external" ? value.external.url : value.file.url;
+      const src = value.src
       const caption = value.caption ? value.caption[0]?.plain_text : "";
+      
       return (
         <figure>
-          <img src={src} alt={caption} />
+          <Image src={src} alt={caption} height={value.height} width={value.width} placeholder='blur' blurDataURL={value.blurDataURL}/>
           {caption && <figcaption>{caption}</figcaption>}
         </figure>
       )
@@ -200,10 +202,22 @@ export async function getStaticProps(context) {
     return block;
   });
 
+  const blocksWithImage = await Promise.all(blocksWithChildren.map(async (block) => {
+    if (block.type === 'image') {
+      const imageUrl = block.image[block.image.type].url
+      const { base64, img } = await getPlaiceholder(imageUrl)
+      block.image.blurDataURL = base64
+      block.image.width = img.width
+      block.image.height = img.height
+      block.image.src = img.src
+    }
+    return block
+  }))
+
   return {
     props: {
       page,
-      blocks: blocksWithChildren,
+      blocks: blocksWithImage,
     },
     revalidate: 1,
   };
