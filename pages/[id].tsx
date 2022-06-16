@@ -8,7 +8,7 @@ import { RichText } from "../components/RichText"
 import { PDF } from "../components/PDF"
 import Image from '../components/Image'
 import { getPlaiceholder } from "plaiceholder"
-import EquationBlock from "../components/EquationBlock"
+import EquationBlock from '../components/EquationBlock'
 import copyTeX from '../lib/copyTeX'
 
 function renderNestedList(block) {
@@ -167,9 +167,12 @@ export default function Post({ page, blocks }) {
           {blocks.map((block) => (
             <Fragment key={block.id}>{renderBlock(block)}</Fragment>
           ))}
-          <Link href="/">
-            <a className={styles.back}>← Go home</a>
-          </Link>
+          <div className={styles.footer}>
+            <Link href="/">
+              <a className={styles.back}>← Go home</a>
+            </Link>
+            <a href={page.url} rel='noreferrer' target='_blank'>Notion source</a>
+          </div>
         </section>
       </article>
     </div>
