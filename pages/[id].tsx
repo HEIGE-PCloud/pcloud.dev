@@ -6,7 +6,7 @@ import { databaseId } from "./index"
 import styles from "./post.module.css"
 import { RichText } from "../components/RichText"
 import { PDF } from "../components/PDF"
-import Image from 'next/image'
+import Image from '../components/Image'
 import { getPlaiceholder } from "plaiceholder"
 
 function renderNestedList(block) {
@@ -90,14 +90,14 @@ function renderBlock(block) {
     case "child_page":
       return <p>{value.title}</p>;
     case "image":
-      const src = value.src
-      const caption = value.caption ? value.caption[0]?.plain_text : "";
-      
       return (
-        <figure>
-          <Image src={src} alt={caption} height={value.height} width={value.width} placeholder='blur' blurDataURL={value.blurDataURL}/>
-          {caption && <figcaption>{caption}</figcaption>}
-        </figure>
+        // eslint-disable-next-line jsx-a11y/alt-text
+        <Image 
+          src={value.src}
+          alt={value.caption ? value.caption[0]?.plain_text : ""}
+          height={value.height} 
+          width={value.width} 
+          blurDataURL={value.blurDataURL}/>
       )
     case "divider":
       return <hr key={id} />;
