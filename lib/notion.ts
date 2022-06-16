@@ -1,9 +1,9 @@
 import { Client } from '@notionhq/client'
 import {
   GetPageResponse,
-  GetBlockResponse,
   QueryDatabaseResponse
 } from '@notionhq/client/build/src/api-endpoints'
+import { BlockObjectResponse } from './notionTypes'
 
 const notion = new Client({
   auth: process.env.NOTION_TOKEN
@@ -25,8 +25,8 @@ export async function getPage(pageId: string): Promise<GetPageResponse> {
 
 export async function getBlockChildren(
   blockId: string
-): Promise<GetBlockResponse[]> {
-  const blocks: GetBlockResponse[] = []
+): Promise<BlockObjectResponse[]> {
+  const blocks: BlockObjectResponse[] = []
   let cursor: string | undefined = undefined
   while (true) {
     const { results, has_more, next_cursor } =
@@ -34,7 +34,7 @@ export async function getBlockChildren(
         start_cursor: cursor,
         block_id: blockId
       })
-    blocks.push(...results)
+    blocks.push(...(results as BlockObjectResponse[]))
     if (!has_more) {
       break
     }

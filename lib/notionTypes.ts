@@ -4882,11 +4882,19 @@ export type ImageBlock = {
         type: 'external'
         external: { url: TextRequest }
         caption: Array<RichTextItemResponse>
+        blurDataURL?: string
+        width?: number
+        height?: number
+        src?: string
       }
     | {
         type: 'file'
         file: { url: string; expiry_time: string }
         caption: Array<RichTextItemResponse>
+        blurDataURL?: string
+        width?: number
+        height?: number
+        src?: string
       }
   object: 'block'
   id: string

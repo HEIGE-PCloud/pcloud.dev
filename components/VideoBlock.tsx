@@ -1,7 +1,7 @@
-import { VideoBlock } from '../lib/notionTypes'
+import { VideoBlock as VideoBlockType } from '../lib/notionTypes'
 import styles from './VideoBlock.module.css'
 
-export default function VideoBlock({ block }: { block: VideoBlock }) {
+export default function VideoBlock({ block }: { block: VideoBlockType }) {
   const video = block.video
   const url = video.type === 'external' ? video.external.url : video.file.url
   return (
