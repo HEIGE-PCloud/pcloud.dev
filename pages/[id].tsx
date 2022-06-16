@@ -137,7 +137,7 @@ function renderBlock(block) {
       )
     case 'equation':
       return (
-        <EquationBlock expression={value.expression}/>
+        <EquationBlock expression={value.expression} displayMode={true}/>
       )
     default:
       return `❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type
