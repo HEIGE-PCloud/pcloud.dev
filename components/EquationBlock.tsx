@@ -1,4 +1,5 @@
 import katex from 'katex'
+import styles from './EquationBlock.module.css'
 import 'katex/dist/katex.css'
 import 'katex/contrib/mhchem'
 
@@ -12,7 +13,7 @@ export default function EquationBlock({ expression, displayMode, className }: Eq
     if (displayMode) {
         return (
             <div
-                className={className} 
+                className={styles.blockEquation} 
                 dangerouslySetInnerHTML={{__html: katex.renderToString(expression, {
                 throwOnError: false,
                 displayMode
