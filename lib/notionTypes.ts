@@ -668,7 +668,7 @@ type PartialUserObjectResponse =
   | { id: IdRequest; object: 'user' }
   | UserObjectResponse
 
-type RichTextItemResponse =
+export type RichTextItemResponse =
   | {
       type: 'text'
       text: { content: string; link: { url: TextRequest } | null }
