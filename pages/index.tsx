@@ -57,14 +57,7 @@ export default function Home({ posts }) {
         <h2 className={styles.heading}>All Posts</h2>
         <ol className={styles.posts}>
           {posts.map((post) => {
-            const date = new Date(post.last_edited_time).toLocaleString(
-              'en-US',
-              {
-                month: 'short',
-                day: '2-digit',
-                year: 'numeric'
-              }
-            )
+            const date = new Date(post.last_edited_time).toUTCString()
             return (
               <li key={post.id} className={styles.post}>
                 <h3 className={styles.postTitle}>
