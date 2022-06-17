@@ -1,5 +1,6 @@
 module.exports = {
   images: {
-    domains: ['images.unsplash.com', 's3.us-west-2.amazonaws.com']
+    domains: ['images.unsplash.com', 's3.us-west-2.amazonaws.com'],
+    minimumCacheTTL: 3600
   }
 }
