@@ -211,6 +211,9 @@ export default function Post({
   page: PageResponse
   blocks: BlockObjectResponse[]
 }) {
+  if (!page) {
+    return
+  }
   const title = page.properties.Name
   if (title.type != 'title') return
   return (
