@@ -18,7 +18,7 @@ export default function CodeBlock({ block }: { block: CodeBlockType }) {
 
   return (
     <div>
-      <pre>
+      <pre className={`language-${lang}`}>
         <code
           className={`language-${lang}`}
           dangerouslySetInnerHTML={{
