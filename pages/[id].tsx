@@ -16,6 +16,7 @@ import {
   PageResponse
 } from '../lib/notionTypes'
 import { Fragment } from 'react'
+import CodeBlock from '../components/CodeBlock'
 
 function renderBlock(
   block: BlockObjectResponse,
@@ -197,6 +198,8 @@ function renderBlock(
       return <EquationBlock block={block} />
     case 'video':
       return <VideoBlock block={block} />
+    case 'code':
+      return <CodeBlock block={block} />
     default:
       return `❌ Unsupported block (${
         type === 'unsupported' ? 'unsupported by Notion API' : type
