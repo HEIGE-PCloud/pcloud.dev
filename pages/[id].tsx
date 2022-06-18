@@ -1,16 +1,16 @@
-import { Fragment } from 'react'
 import Head from 'next/head'
 import { getDatabase, getPage, getPageBlocks } from '../lib/notion'
 import Link from 'next/link'
 import { databaseId } from './index'
 import styles from './post.module.css'
 import { RichText } from '../components/RichText'
-import { PDF } from '../components/PDFBlock'
+import { PdfBlock } from '../components/PdfBlock'
 import Image from '../components/ImageBlock'
 import EquationBlock from '../components/EquationBlock'
 import copyTeX from '../lib/copyTeX'
 import VideoBlock from '../components/VideoBlock'
-import { BlockObjectResponse } from '../lib/notionTypes'
+import { BlockObjectResponse, PageResponse } from '../lib/notionTypes'
+import { Fragment } from 'react'
 
 function renderNestedList(block) {
   const { type } = block
@@ -128,9 +128,9 @@ function renderBlock(block: BlockObjectResponse) {
         </a>
       )
     case 'pdf':
-      return <PDF url={value.file.url} />
+      return <PdfBlock block={block} />
     case 'equation':
-      return <EquationBlock expression={value.expression} displayMode={true} />
+      return <EquationBlock block={block} />
     case 'video':
       return <VideoBlock block={block} />
     default:
@@ -140,20 +140,25 @@ function renderBlock(block: BlockObjectResponse) {
   }
 }
 
-export default function Post({ page, blocks }) {
-  if (!page || !blocks) {
-    return <div />
-  }
+export default function Post({
+  page,
+  blocks
+}: {
+  page: PageResponse
+  blocks: BlockObjectResponse[]
+}) {
+  const title = page.properties.Name
+  if (title.type != 'title') return
   return (
     <div>
       <Head>
-        <title>{page.properties.Name.title[0].plain_text}</title>
+        <title>{title.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <article onCopy={copyTeX} className={styles.container}>
         <h1 className={styles.name}>
-          <RichText text={page.properties.Name.title} />
+          <RichText text={title.title} />
         </h1>
         <section>
           {blocks.map((block) => (
@@ -189,7 +194,6 @@ export async function getStaticProps(context) {
   const { id } = context.params
   const page = await getPage(id)
   const blocks = await getPageBlocks(id)
-  // console.log(blocks)
 
   return {
     props: {

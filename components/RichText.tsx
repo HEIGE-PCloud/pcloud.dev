@@ -1,6 +1,8 @@
 import styles from './RichText.module.css'
-import EquationBlock from './EquationBlock'
 import { RichTextItemResponse } from '../lib/notionTypes'
+import katex from 'katex'
+import 'katex/dist/katex.css'
+import 'katex/contrib/mhchem'
 
 export function RichText({ text }: { text: RichTextItemResponse[] }) {
   if (text.length === 0) {
@@ -26,11 +28,16 @@ export function RichText({ text }: { text: RichTextItemResponse[] }) {
         if (type === 'equation') {
           const { equation } = value
           return (
-            <EquationBlock
-              expression={equation.expression}
-              displayMode={false}
+            <span
+              key={index}
               className={className}
-            />
+              dangerouslySetInnerHTML={{
+                __html: katex.renderToString(equation.expression, {
+                  throwOnError: false,
+                  displayMode: false
+                })
+              }}
+            ></span>
           )
         } else if (type === 'text') {
           const { text } = value

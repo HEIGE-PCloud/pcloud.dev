@@ -8923,129 +8923,131 @@ type GetPagePathParameters = {
 
 export type GetPageParameters = GetPagePathParameters
 
-export type GetPageResponse =
-  | {
-      parent:
-        | { type: 'database_id'; database_id: IdRequest }
-        | { type: 'page_id'; page_id: IdRequest }
-        | { type: 'workspace'; workspace: true }
-      properties: Record<
-        string,
-        | { type: 'number'; number: number | null; id: string }
-        | { type: 'url'; url: string | null; id: string }
-        | { type: 'select'; select: SelectPropertyResponse | null; id: string }
-        | {
-            type: 'multi_select'
-            multi_select: Array<SelectPropertyResponse>
-            id: string
-          }
-        | { type: 'date'; date: DateResponse | null; id: string }
-        | { type: 'email'; email: string | null; id: string }
-        | { type: 'phone_number'; phone_number: string | null; id: string }
-        | { type: 'checkbox'; checkbox: boolean; id: string }
-        | {
-            type: 'files'
-            files: Array<
-              | {
-                  file: { url: string; expiry_time: string }
-                  name: StringRequest
-                  type?: 'file'
-                }
-              | {
-                  external: { url: TextRequest }
-                  name: StringRequest
-                  type?: 'external'
-                }
-            >
-            id: string
-          }
-        | {
-            type: 'created_by'
-            created_by: PartialUserObjectResponse
-            id: string
-          }
-        | { type: 'created_time'; created_time: string; id: string }
-        | {
-            type: 'last_edited_by'
-            last_edited_by: PartialUserObjectResponse
-            id: string
-          }
-        | { type: 'last_edited_time'; last_edited_time: string; id: string }
-        | {
-            type: 'formula'
-            formula:
-              | { type: 'string'; string: string | null }
-              | { type: 'date'; date: DateResponse | null }
-              | { type: 'number'; number: number | null }
-              | { type: 'boolean'; boolean: boolean | null }
-            id: string
-          }
-        | { type: 'title'; title: Array<RichTextItemResponse>; id: string }
-        | {
-            type: 'rich_text'
-            rich_text: Array<RichTextItemResponse>
-            id: string
-          }
-        | {
-            type: 'people'
-            people: Array<PartialUserObjectResponse>
-            id: string
-          }
-        | { type: 'relation'; relation: Array<{ id: string }>; id: string }
-        | {
-            type: 'rollup'
-            rollup:
-              | {
-                  type: 'number'
-                  number: number | null
-                  function: RollupFunction
-                }
-              | {
-                  type: 'date'
-                  date: DateResponse | null
-                  function: RollupFunction
-                }
-              | {
-                  type: 'array'
-                  array: Array<
-                    | { type: 'title'; title: Array<RichTextItemResponse> }
-                    | {
-                        type: 'rich_text'
-                        rich_text: Array<RichTextItemResponse>
-                      }
-                    | {
-                        type: 'people'
-                        people: Array<PartialUserObjectResponse>
-                      }
-                    | { type: 'relation'; relation: Array<{ id: string }> }
-                  >
-                  function: RollupFunction
-                }
-            id: string
-          }
-      >
-      icon:
-        | { type: 'emoji'; emoji: EmojiRequest }
-        | null
-        | { type: 'external'; external: { url: TextRequest } }
-        | null
-        | { type: 'file'; file: { url: string; expiry_time: string } }
-        | null
-      cover:
-        | { type: 'external'; external: { url: TextRequest } }
-        | null
-        | { type: 'file'; file: { url: string; expiry_time: string } }
-        | null
-      created_by: { id: IdRequest; object: 'user' }
-      last_edited_by: { id: IdRequest; object: 'user' }
-      object: 'page'
-      id: string
-      created_time: string
-      last_edited_time: string
-      archived: boolean
-      url: string
-    }
-  | { object: 'page'; id: string }
+export type PageResponse = {
+  parent:
+    | { type: 'database_id'; database_id: IdRequest }
+    | { type: 'page_id'; page_id: IdRequest }
+    | { type: 'workspace'; workspace: true }
+  properties: Record<
+    string,
+    | { type: 'number'; number: number | null; id: string }
+    | { type: 'url'; url: string | null; id: string }
+    | { type: 'select'; select: SelectPropertyResponse | null; id: string }
+    | {
+        type: 'multi_select'
+        multi_select: Array<SelectPropertyResponse>
+        id: string
+      }
+    | { type: 'date'; date: DateResponse | null; id: string }
+    | { type: 'email'; email: string | null; id: string }
+    | { type: 'phone_number'; phone_number: string | null; id: string }
+    | { type: 'checkbox'; checkbox: boolean; id: string }
+    | {
+        type: 'files'
+        files: Array<
+          | {
+              file: { url: string; expiry_time: string }
+              name: StringRequest
+              type?: 'file'
+            }
+          | {
+              external: { url: TextRequest }
+              name: StringRequest
+              type?: 'external'
+            }
+        >
+        id: string
+      }
+    | {
+        type: 'created_by'
+        created_by: PartialUserObjectResponse
+        id: string
+      }
+    | { type: 'created_time'; created_time: string; id: string }
+    | {
+        type: 'last_edited_by'
+        last_edited_by: PartialUserObjectResponse
+        id: string
+      }
+    | { type: 'last_edited_time'; last_edited_time: string; id: string }
+    | {
+        type: 'formula'
+        formula:
+          | { type: 'string'; string: string | null }
+          | { type: 'date'; date: DateResponse | null }
+          | { type: 'number'; number: number | null }
+          | { type: 'boolean'; boolean: boolean | null }
+        id: string
+      }
+    | { type: 'title'; title: Array<RichTextItemResponse>; id: string }
+    | {
+        type: 'rich_text'
+        rich_text: Array<RichTextItemResponse>
+        id: string
+      }
+    | {
+        type: 'people'
+        people: Array<PartialUserObjectResponse>
+        id: string
+      }
+    | { type: 'relation'; relation: Array<{ id: string }>; id: string }
+    | {
+        type: 'rollup'
+        rollup:
+          | {
+              type: 'number'
+              number: number | null
+              function: RollupFunction
+            }
+          | {
+              type: 'date'
+              date: DateResponse | null
+              function: RollupFunction
+            }
+          | {
+              type: 'array'
+              array: Array<
+                | { type: 'title'; title: Array<RichTextItemResponse> }
+                | {
+                    type: 'rich_text'
+                    rich_text: Array<RichTextItemResponse>
+                  }
+                | {
+                    type: 'people'
+                    people: Array<PartialUserObjectResponse>
+                  }
+                | { type: 'relation'; relation: Array<{ id: string }> }
+              >
+              function: RollupFunction
+            }
+        id: string
+      }
+  >
+  icon:
+    | { type: 'emoji'; emoji: EmojiRequest }
+    | null
+    | { type: 'external'; external: { url: TextRequest } }
+    | null
+    | { type: 'file'; file: { url: string; expiry_time: string } }
+    | null
+  cover:
+    | { type: 'external'; external: { url: TextRequest } }
+    | null
+    | { type: 'file'; file: { url: string; expiry_time: string } }
+    | null
+  created_by: { id: IdRequest; object: 'user' }
+  last_edited_by: { id: IdRequest; object: 'user' }
+  object: 'page'
+  id: string
+  created_time: string
+  last_edited_time: string
+  archived: boolean
+  url: string
+}
+
+export type PartialPageResponse = { object: 'page'; id: string }
+
+export type GetPageResponse = PageResponse | PartialPageResponse
 
 export const getPage = {
   method: 'get',
