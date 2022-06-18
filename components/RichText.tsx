@@ -3,6 +3,7 @@ import { RichTextItemResponse } from '../lib/notionTypes'
 import katex from 'katex'
 import 'katex/dist/katex.css'
 import 'katex/contrib/mhchem'
+import { Fragment } from 'react'
 
 export function RichText({ text }: { text: RichTextItemResponse[] }) {
   if (text.length === 0) {
@@ -16,21 +17,13 @@ export function RichText({ text }: { text: RichTextItemResponse[] }) {
           annotations: { bold, code, color, italic, strikethrough, underline }
         } = value
 
-        const className = [
-          bold ? styles.bold : '',
-          code ? styles.code : '',
-          italic ? styles.italic : '',
-          strikethrough ? styles.strikethrough : '',
-          underline ? styles.underline : '',
-          color ? styles[color] : ''
-        ].join(' ')
-
+        const colorClass = color ? styles[color] : ''
         if (type === 'equation') {
           const { equation } = value
           return (
             <span
               key={index}
-              className={className}
+              className={colorClass}
               dangerouslySetInnerHTML={{
                 __html: katex.renderToString(equation.expression, {
                   throwOnError: false,
@@ -41,13 +34,15 @@ export function RichText({ text }: { text: RichTextItemResponse[] }) {
           )
         } else if (type === 'text') {
           const { text } = value
+          let tag = <Fragment>{text.content}</Fragment>
+          if (bold) tag = <b>{tag}</b>
+          if (code) tag = <code>{tag}</code>
+          if (italic) tag = <i>{tag}</i>
+          if (strikethrough) tag = <s>{tag}</s>
+          if (underline) tag = <u>{tag}</u>
           return (
-            <span key={index} className={className}>
-              {text.link ? (
-                <a href={text.link.url}>{text.content}</a>
-              ) : (
-                text.content
-              )}
+            <span key={index} className={colorClass}>
+              {text.link ? <a href={text.link.url}>{tag}</a> : tag}
             </span>
           )
         } else if (type === 'mention') {
