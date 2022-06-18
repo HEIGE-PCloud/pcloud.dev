@@ -51,6 +51,13 @@ function renderBlock(
         </h3>
       )
     case 'bulleted_list_item':
+      // To render a bulleted list item
+      // If the bulleted list item is the first item in the sublist
+      // Create array itemList
+      // and add all subsequent bulleted list item in to itemList
+      // Render itemList
+      // Otherwise (not the first item)
+      // return void
       if (
         index === 0 ||
         (index > 0 && array[index - 1].type !== 'bulleted_list_item')
@@ -82,6 +89,13 @@ function renderBlock(
         )
       } else return
     case 'numbered_list_item':
+      // To render a numbered list item
+      // If the numbered list item is the first item in the sublist
+      // Create array itemList
+      // and add all subsequent bulleted list item in to itemList
+      // Render itemList
+      // Otherwise (not the first item)
+      // return void
       if (
         index === 0 ||
         (index > 0 && array[index - 1].type !== 'numbered_list_item')
