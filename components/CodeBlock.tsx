@@ -1,6 +1,9 @@
 import { CodeBlock as CodeBlockType } from '../lib/notionTypes'
 import Prism from 'prismjs'
 import { useEffect } from 'react'
+import styles from './CodeBlock.module.css'
+// import 'prismjs/plugins/line-numbers/prism-line-numbers.js'
+// import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
 
 export default function CodeBlock({ block }: { block: CodeBlockType }) {
   const lang = block.code.language
@@ -16,8 +19,8 @@ export default function CodeBlock({ block }: { block: CodeBlockType }) {
   })
 
   return (
-    <pre className={`line-numbers language-${lang}`}>
-      <code className={`language-${lang}`}>{code}</code>
+    <pre className={`line-numbers ${styles.pre} language-${lang}`}>
+      <code className={`${styles.code} language-${lang}`}>{code}</code>
     </pre>
   )
 }
