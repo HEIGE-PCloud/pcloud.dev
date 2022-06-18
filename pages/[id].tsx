@@ -9,23 +9,19 @@ import Image from '../components/ImageBlock'
 import EquationBlock from '../components/EquationBlock'
 import copyTeX from '../lib/copyTeX'
 import VideoBlock from '../components/VideoBlock'
-import { BlockObjectResponse, PageResponse } from '../lib/notionTypes'
+import {
+  BlockObjectResponse,
+  BulletedListItemBlock,
+  NumberedListItemBlock,
+  PageResponse
+} from '../lib/notionTypes'
 import { Fragment } from 'react'
 
-function renderNestedList(block) {
-  const { type } = block
-  const value = block[type]
-  if (!value) return null
-
-  const isNumberedList = value.children[0].type === 'numbered_list_item'
-
-  if (isNumberedList) {
-    return <ol>{value.children.map((block) => renderBlock(block))}</ol>
-  }
-  return <ul>{value.children.map((block) => renderBlock(block))}</ul>
-}
-
-function renderBlock(block: BlockObjectResponse) {
+function renderBlock(
+  block: BlockObjectResponse,
+  index: number,
+  array: BlockObjectResponse[]
+) {
   const { type, id } = block
   const value = block[type]
 
@@ -55,13 +51,67 @@ function renderBlock(block: BlockObjectResponse) {
         </h3>
       )
     case 'bulleted_list_item':
+      if (
+        index === 0 ||
+        (index > 0 && array[index - 1].type !== 'bulleted_list_item')
+      ) {
+        const itemList: BulletedListItemBlock[] = []
+        for (let i = index; array[i]?.type === 'bulleted_list_item'; i++) {
+          itemList.push(array[i] as BulletedListItemBlock)
+        }
+        return (
+          <ul>
+            {itemList.map((block) => {
+              return (
+                <li key={block.id}>
+                  <RichText text={block.bulleted_list_item.rich_text} />
+                  {block.has_children &&
+                    (block as BlockObjectResponse).children.map(
+                      (childBlock, index, array) => {
+                        return (
+                          <Fragment key={childBlock.id}>
+                            {renderBlock(childBlock, index, array)}
+                          </Fragment>
+                        )
+                      }
+                    )}
+                </li>
+              )
+            })}
+          </ul>
+        )
+      } else return
     case 'numbered_list_item':
-      return (
-        <li>
-          <RichText text={value.rich_text} />
-          {!!value.children && renderNestedList(block)}
-        </li>
-      )
+      if (
+        index === 0 ||
+        (index > 0 && array[index - 1].type !== 'numbered_list_item')
+      ) {
+        const itemList: NumberedListItemBlock[] = []
+        for (let i = index; array[i]?.type === 'numbered_list_item'; i++) {
+          itemList.push(array[i] as NumberedListItemBlock)
+        }
+        return (
+          <ol>
+            {itemList.map((block) => {
+              return (
+                <li key={block.id}>
+                  <RichText text={block.numbered_list_item.rich_text} />
+                  {block.has_children &&
+                    (block as BlockObjectResponse).children.map(
+                      (childBlock, index, array) => {
+                        return (
+                          <Fragment key={childBlock.id}>
+                            {renderBlock(childBlock, index, array)}
+                          </Fragment>
+                        )
+                      }
+                    )}
+                </li>
+              )
+            })}
+          </ol>
+        )
+      } else return
     case 'to_do':
       return (
         <div>
@@ -77,9 +127,9 @@ function renderBlock(block: BlockObjectResponse) {
           <summary>
             <RichText text={value.rich_text} />
           </summary>
-          {value.children?.map((block) => (
+          {/* {value.children?.map((block) => (
             <Fragment key={block.id}>{renderBlock(block)}</Fragment>
-          ))}
+          ))} */}
         </details>
       )
     case 'child_page':
@@ -161,8 +211,10 @@ export default function Post({
           <RichText text={title.title} />
         </h1>
         <section>
-          {blocks.map((block) => (
-            <Fragment key={block.id}>{renderBlock(block)}</Fragment>
+          {blocks.map((block, index, array) => (
+            <Fragment key={block.id}>
+              {renderBlock(block, index, array)}
+            </Fragment>
           ))}
           <div className={styles.footer}>
             <Link href="/">
