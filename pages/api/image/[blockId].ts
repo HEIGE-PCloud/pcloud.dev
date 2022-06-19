@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getBlock } from '../../../lib/notion'
 
-const cache: { [blockId: string]: { expiry_time: string; url: string } } = {}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -21,20 +19,9 @@ export default async function handler(
 
   // handle external image
   if (block.image.type === 'external') {
-    res.redirect(307, block.image.external.url)
+    res.status(200).send({url: block.image.external.url})
     return
   }
-
-  // if cache exists
-  if (cache[block.id] && new Date(cache[block.id].expiry_time) > new Date()) {
-    res.redirect(307, cache[block.id].url)
-    return
-  }
-
-  // if cache does not exists
-  cache[block.id] = {
-    expiry_time: block.image.file.expiry_time,
-    url: block.image.file.url
-  }
-  res.redirect(307, block.image.file.url)
+  
+  res.status(200).send({url: block.image.file.url})
 }
