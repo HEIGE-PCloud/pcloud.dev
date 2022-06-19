@@ -24,24 +24,11 @@ export async function getPage(pageId: string): Promise<GetPageResponse> {
   return response
 }
 
-export async function getBlockChildren(
-  blockId: string
-): Promise<BlockObjectResponse[]> {
-  const blocks: BlockObjectResponse[] = []
-  let cursor: string | undefined = undefined
-  while (true) {
-    const { results, has_more, next_cursor } =
-      await notion.blocks.children.list({
-        start_cursor: cursor,
-        block_id: blockId
-      })
-    blocks.push(...(results as BlockObjectResponse[]))
-    if (!has_more) {
-      break
-    }
-    cursor = next_cursor
-  }
-  return blocks
+export async function getBlock(blockId: string) {
+  const response = await notion.blocks.retrieve({
+    block_id: blockId,
+  });
+  return response as BlockObjectResponse
 }
 
 /*

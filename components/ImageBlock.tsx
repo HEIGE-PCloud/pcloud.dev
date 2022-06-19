@@ -1,14 +1,17 @@
 import NextImage from 'next/image'
-export default function Image({ src, alt, height, width, blurDataURL }) {
+import { ImageBlock } from '../lib/notionTypes'
+export default function Image({ block } : { block: ImageBlock}) {
+  const image = block.image
+  const alt = image.caption ? image.caption[0]?.plain_text : ''
   return (
     <figure>
       <NextImage
-        src={src}
+        src={`/api/image/${block.id}`}
         alt={alt}
-        height={height}
-        width={width}
+        height={image.height}
+        width={image.width}
         placeholder="blur"
-        blurDataURL={blurDataURL}
+        blurDataURL={image.blurDataURL}
       />
       {alt && <figcaption>{alt}</figcaption>}
     </figure>
