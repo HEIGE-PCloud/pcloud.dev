@@ -1,4 +1,5 @@
-import styles from './RichText.module.css'
+// import styles from './RichText.module.css'
+import colors from '../styles/color.module.css'
 import { RichTextItemResponse } from '../lib/notionTypes'
 import katex from 'katex'
 import 'katex/dist/katex.css'
@@ -17,7 +18,7 @@ export function RichText({ text }: { text: RichTextItemResponse[] }) {
           annotations: { bold, code, color, italic, strikethrough, underline }
         } = value
 
-        const colorClass = color ? styles[color] : ''
+        const colorClass = color ? colors[color] : ''
         if (type === 'equation') {
           const { equation } = value
           return (

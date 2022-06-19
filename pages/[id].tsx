@@ -9,6 +9,7 @@ import Image from '../components/ImageBlock'
 import EquationBlock from '../components/EquationBlock'
 import copyTeX from '../lib/copyTeX'
 import VideoBlock from '../components/VideoBlock'
+import colors from '../styles/color.module.css'
 import {
   BlockObjectResponse,
   BulletedListItemBlock,
@@ -71,7 +72,7 @@ function renderBlock(
           <ul>
             {itemList.map((block) => {
               return (
-                <li key={block.id}>
+                <li key={block.id} className={colors[block.bulleted_list_item.color]}>
                   <RichText text={block.bulleted_list_item.rich_text} />
                   {block.has_children &&
                     (block as BlockObjectResponse).children.map(
@@ -109,7 +110,7 @@ function renderBlock(
           <ol>
             {itemList.map((block) => {
               return (
-                <li key={block.id}>
+                <li key={block.id} className={colors[block.numbered_list_item.color]}>
                   <RichText text={block.numbered_list_item.rich_text} />
                   {block.has_children &&
                     (block as BlockObjectResponse).children.map(
