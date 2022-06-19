@@ -72,7 +72,10 @@ function renderBlock(
           <ul>
             {itemList.map((block) => {
               return (
-                <li key={block.id} className={colors[block.bulleted_list_item.color]}>
+                <li
+                  key={block.id}
+                  className={colors[block.bulleted_list_item.color]}
+                >
                   <RichText text={block.bulleted_list_item.rich_text} />
                   {block.has_children &&
                     (block as BlockObjectResponse).children.map(
@@ -110,7 +113,10 @@ function renderBlock(
           <ol>
             {itemList.map((block) => {
               return (
-                <li key={block.id} className={colors[block.numbered_list_item.color]}>
+                <li
+                  key={block.id}
+                  className={colors[block.numbered_list_item.color]}
+                >
                   <RichText text={block.numbered_list_item.rich_text} />
                   {block.has_children &&
                     (block as BlockObjectResponse).children.map(
@@ -157,13 +163,7 @@ function renderBlock(
     case 'image':
       return (
         // eslint-disable-next-line jsx-a11y/alt-text
-        <Image
-          src={value.src}
-          alt={value.caption ? value.caption[0]?.plain_text : ''}
-          height={value.height}
-          width={value.width}
-          blurDataURL={value.blurDataURL}
-        />
+        <Image block={block} />
       )
     case 'divider':
       return <hr key={id} />
@@ -277,6 +277,6 @@ export async function getStaticProps(context) {
       page,
       blocks: blocks
     },
-    revalidate: 1
+    revalidate: 60
   }
 }
