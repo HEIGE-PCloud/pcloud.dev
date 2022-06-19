@@ -18,12 +18,13 @@ import {
 } from '../lib/notionTypes'
 import { Fragment } from 'react'
 import CodeBlock from '../components/CodeBlock'
+import ToggleBlock from '../components/ToggleBlock'
 
 function renderBlock(
   block: BlockObjectResponse,
   index: number,
   array: BlockObjectResponse[]
-) {
+): JSX.Element {
   const { type, id } = block
   const value = block[type]
 
@@ -144,20 +145,7 @@ function renderBlock(
         </div>
       )
     case 'toggle':
-      return (
-        <details>
-          <summary>
-            <RichText text={block.toggle.rich_text} />
-          </summary>
-          {block.children?.map((block, index, array) => {
-            return (
-              <Fragment key={block.id}>
-                {renderBlock(block, index, array)}
-              </Fragment>
-            )
-          })}
-        </details>
-      )
+      return <ToggleBlock block={block} render={renderBlock} />
     case 'child_page':
       return <p>{value.title}</p>
     case 'image':
@@ -206,9 +194,11 @@ function renderBlock(
     case 'code':
       return <CodeBlock block={block} />
     default:
-      return `❌ Unsupported block (${
-        type === 'unsupported' ? 'unsupported by Notion API' : type
-      })`
+      return (
+        <p>{`❌ Unsupported block (${
+          type === 'unsupported' ? 'unsupported by Notion API' : type
+        })`}</p>
+      )
   }
 }
 
