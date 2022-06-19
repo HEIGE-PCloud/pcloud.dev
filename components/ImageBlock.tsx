@@ -3,13 +3,14 @@ import { ImageBlock } from '../lib/notionTypes'
 import { useEffect, useState } from 'react'
 
 export default function Image({ block }: { block: ImageBlock }) {
-  const [src, setSrc] = useState(null)
-  const [isLoading, setLoading] = useState(false)
-
   const image = block.image
   const url = image[image.type].url
   const alt = image.caption ? image.caption[0]?.plain_text : ''
   const expiry_time = image.type === 'file' ? image.file.expiry_time : null
+
+  const [src, setSrc] = useState(url)
+  const [isLoading, setLoading] = useState(false)
+
 
   // if external or cache is not expired, set src directly
   // if the cache is expired, load new src from api
