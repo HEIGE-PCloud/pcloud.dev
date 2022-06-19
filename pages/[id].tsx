@@ -140,11 +140,15 @@ function renderBlock(
       return (
         <details>
           <summary>
-            <RichText text={value.rich_text} />
+            <RichText text={block.toggle.rich_text} />
           </summary>
-          {/* {value.children?.map((block) => (
-            <Fragment key={block.id}>{renderBlock(block)}</Fragment>
-          ))} */}
+          {block.children?.map((block, index, array) => {
+            return (
+              <Fragment key={block.id}>
+                {renderBlock(block, index, array)}
+              </Fragment>
+            )
+          })}
         </details>
       )
     case 'child_page':
