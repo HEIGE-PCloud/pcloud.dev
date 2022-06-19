@@ -19,9 +19,9 @@ export default async function handler(
 
   // handle external image
   if (block.image.type === 'external') {
-    res.status(200).send({url: block.image.external.url})
+    res.status(200).send({ url: block.image.external.url })
     return
   }
-  
-  res.status(200).send({url: block.image.file.url})
+
+  res.status(200).send({ url: block.image.file.url })
 }

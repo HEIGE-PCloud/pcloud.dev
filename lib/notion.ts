@@ -26,8 +26,8 @@ export async function getPage(pageId: string): Promise<GetPageResponse> {
 
 export async function getBlock(blockId: string) {
   const response = await notion.blocks.retrieve({
-    block_id: blockId,
-  });
+    block_id: blockId
+  })
   return response as BlockObjectResponse
 }
 

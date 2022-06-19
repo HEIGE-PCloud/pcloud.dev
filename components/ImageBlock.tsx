@@ -11,11 +11,9 @@ export default function Image({ block }: { block: ImageBlock }) {
   const [src, setSrc] = useState(url)
   const [isLoading, setLoading] = useState(false)
 
-
   // if external or cache is not expired, set src directly
   // if the cache is expired, load new src from api
   useEffect(() => {
-
     if (image.type === 'external') {
       setSrc(url)
     } else {
