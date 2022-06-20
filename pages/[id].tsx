@@ -19,6 +19,7 @@ import {
 import { Fragment } from 'react'
 import CodeBlock from '../components/CodeBlock'
 import ToggleBlock from '../components/ToggleBlock'
+import DividerBlock from '../components/DividerBlock'
 
 function renderBlock(
   block: BlockObjectResponse,
@@ -154,7 +155,7 @@ function renderBlock(
         <Image block={block} />
       )
     case 'divider':
-      return <hr key={id} />
+      return <DividerBlock />
     case 'quote':
       return (
         <blockquote key={id}>
