@@ -20,6 +20,7 @@ import { Fragment } from 'react'
 import CodeBlock from '../components/CodeBlock'
 import ToggleBlock from '../components/ToggleBlock'
 import DividerBlock from '../components/DividerBlock'
+import FileBlock from '../components/FileBlock'
 
 function renderBlock(
   block: BlockObjectResponse,
@@ -163,22 +164,7 @@ function renderBlock(
         </blockquote>
       )
     case 'file':
-      const src_file =
-        value.type === 'external' ? value.external.url : value.file.url
-      const splitSourceArray = src_file.split('/')
-      const lastElementInArray = splitSourceArray[splitSourceArray.length - 1]
-      const caption_file = value.caption ? value.caption[0]?.plain_text : ''
-      return (
-        <figure>
-          <div className={styles.file}>
-            📎{' '}
-            <Link href={src_file} passHref>
-              {lastElementInArray.split('?')[0]}
-            </Link>
-          </div>
-          {caption_file && <figcaption>{caption_file}</figcaption>}
-        </figure>
-      )
+      return <FileBlock block={block} />
     case 'bookmark':
       const href = value.url
       return (
