@@ -21,7 +21,7 @@ export default function Image({ block }: { block: ImageBlock }) {
         setSrc(url)
       } else {
         setLoading(true)
-        fetch(`/api/image/${block.id}`)
+        fetch(`/api/file/${block.id}`)
           .then((res) => res.json())
           .then((data) => {
             setSrc(data.url)
