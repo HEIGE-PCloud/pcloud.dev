@@ -31,6 +31,13 @@ export async function getBlock(blockId: string) {
   return response as BlockObjectResponse
 }
 
+export async function getPageProperty(pageId: string, propertyId: string) {
+  return await notion.pages.properties.retrieve({
+    page_id: pageId,
+    property_id: propertyId
+  })
+}
+
 /*
   List all children blocks under a parent block
 */

@@ -10,11 +10,7 @@
     "postinstall": "yarn husky install"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@next/bundle-analyzer": "^12.2.1",
-=======
     "@next/bundle-analyzer": "^12.2.2",
->>>>>>> 44467332e4f17c21254e42c35c0849d6b40d8d1f
     "@notionhq/client": "^2.0.0",
     "katex": "^0.16.0",
     "next": "12.2.2",
