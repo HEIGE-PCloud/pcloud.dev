@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { getDatabase } from '../lib/notion'
+import { getDatabase, getPageProperty } from '../lib/notion'
 import { RichText } from '../components/RichText'
 import styles from './index.module.css'
 
@@ -63,7 +63,7 @@ export default function Home({ posts }) {
                 <h3 className={styles.postTitle}>
                   <Link href={`/${post.id}`}>
                     <a>
-                      <RichText text={post.properties.Name.title} />
+                      <RichText text={post.title} />
                     </a>
                   </Link>
                 </h3>
@@ -81,11 +81,25 @@ export default function Home({ posts }) {
   )
 }
 
+const getPageMetadata = async (pageId, last_edited_time) => {
+  const title: any = await getPageProperty(pageId, 'title')
+  return {
+    id: pageId,
+    last_edited_time: last_edited_time,
+    title: [title.results[0].title]
+  }
+}
+
 export const getStaticProps = async () => {
+  const pagesPromises = []
   const database = await getDatabase(databaseId)
+  database.results.forEach((page: any) => {
+    pagesPromises.push(getPageMetadata(page.id, page.last_edited_time))
+  })
+  const postsData = await Promise.all(pagesPromises)
   return {
     props: {
-      posts: database.results
+      posts: postsData
     },
     revalidate: 1
   }
