@@ -13,7 +13,7 @@
     "@next/bundle-analyzer": "^12.2.3",
     "@notionhq/client": "^2.1.0",
     "katex": "^0.16.0",
-    "next": "12.2.2",
+    "next": "12.2.3",
     "plaiceholder": "^2.4.0",
     "prismjs": "^1.28.0",
     "react": "18.x",
