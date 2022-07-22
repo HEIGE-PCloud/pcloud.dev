@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { getDatabase, getPage, getPageBlocks } from '../lib/notion'
+import { getDatabase, getPage, getPageBlocks, getPageProperty } from '../lib/notion'
 import Link from 'next/link'
 import { databaseId } from './index'
 import styles from './post.module.css'
@@ -205,26 +205,26 @@ function renderBlock(
 
 export default function Post({
   page,
+  title,
   blocks
 }: {
-  page: PageResponse
+  page: PageResponse,
+  title: any,
   blocks: BlockObjectResponse[]
 }) {
   if (!page) {
     return
   }
-  const title = page.properties.Name
-  if (title.type != 'title') return
   return (
     <div>
       <Head>
-        <title>{title.title[0].plain_text}</title>
+        <title>{title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <article onCopy={copyTeX} className={styles.container}>
         <h1 className={styles.name}>
-          <RichText text={title.title} />
+          <RichText text={title} />
         </h1>
         <section>
           {blocks.map((block, index, array) => (
@@ -262,10 +262,12 @@ export async function getStaticProps(context) {
   const { id } = context.params
   const page = await getPage(id)
   const blocks = await getPageBlocks(id)
+  const title: any = await getPageProperty(id, 'title')
 
   return {
     props: {
       page,
+      title: [title.results[0].title],
       blocks: blocks
     },
     revalidate: 60
