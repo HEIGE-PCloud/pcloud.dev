@@ -6,9 +6,11 @@ import {
   iteratePaginatedAPI,
 } from "@notionhq/client";
 import {
+  AudioBlockObjectResponse,
   EquationBlockObjectResponse,
   GetPageResponse,
   PageObjectResponse,
+  VideoBlockObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import { NotionToMarkdown } from "@pclouddev/notion-to-markdown";
 import YAML from "yaml";
@@ -21,46 +23,52 @@ import path from "path";
 import { getContentFile } from "./file";
 require("katex/contrib/mhchem"); // modify katex module
 
-function getExpiryTime(blocks: MdBlock[], expiry_time: string | undefined = undefined): string | undefined {
+function getExpiryTime(
+  blocks: MdBlock[],
+  expiry_time: string | undefined = undefined
+): string | undefined {
   for (const block of blocks) {
     if (block.expiry_time !== undefined) {
-      if (expiry_time === undefined) expiry_time = block.expiry_time
-      else expiry_time = expiry_time < block.expiry_time ? expiry_time : block.expiry_time
+      if (expiry_time === undefined) expiry_time = block.expiry_time;
+      else
+        expiry_time =
+          expiry_time < block.expiry_time ? expiry_time : block.expiry_time;
     }
     if (block.children.length > 0) {
-      const child_expiry_time = getExpiryTime(block.children, expiry_time)
+      const child_expiry_time = getExpiryTime(block.children, expiry_time);
       if (child_expiry_time) {
-        if (expiry_time === undefined) expiry_time = child_expiry_time
-        else expiry_time = expiry_time < child_expiry_time? expiry_time : child_expiry_time
+        if (expiry_time === undefined) expiry_time = child_expiry_time;
+        else
+          expiry_time =
+            expiry_time < child_expiry_time ? expiry_time : child_expiry_time;
       }
     }
   }
-  return expiry_time
+  return expiry_time;
 }
 
 export async function renderPage(page: PageObjectResponse, notion: Client) {
-
   // load formatter config
   const formatterConfig = (await loadConfig()).formatter;
-  formatterConfig.equation.style
+  formatterConfig.equation.style;
 
   const n2m = new NotionToMarkdown({ notionClient: notion });
-  let frontInjectString = ''
+  let frontInjectString = "";
 
   switch (formatterConfig.equation.style) {
-    case 'markdown':
+    case "markdown":
       n2m.setCustomTransformer("equation", async (block) => {
         const { equation } = block as EquationBlockObjectResponse;
         return `\\[${equation}\\]`;
       });
       break;
-    case 'shortcode':
+    case "shortcode":
       n2m.setCustomTransformer("equation", async (block) => {
         const { equation } = block as EquationBlockObjectResponse;
-        return `{{< math >}}\\[${equation}\\]{{< /math >}}`
-      })
+        return `{{< math >}}\\[${equation}\\]{{< /math >}}`;
+      });
       break;
-    case 'html':
+    case "html":
       n2m.setCustomTransformer("equation", async (block) => {
         const { equation } = block as EquationBlockObjectResponse;
         const html = katex.renderToString(equation.expression, {
@@ -69,17 +77,34 @@ export async function renderPage(page: PageObjectResponse, notion: Client) {
         });
         return html;
       });
-      frontInjectString += `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X" crossorigin="anonymous">\n`
-      break
+      frontInjectString += `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X" crossorigin="anonymous">\n`;
+      break;
     default:
-      console.warn('[Warn] invalid notion.toml config')
+      console.warn("[Warn] invalid notion.toml config");
       break;
   }
+  n2m.setCustomTransformer("video", async (block) => {
+    const { video } = block as VideoBlockObjectResponse;
+    const url = video.type === "external" ? video.external.url : video.file.url;
+    return `<video controls src="${url}">
+    Sorry, your browser doesn't support embedded videos, but don't worry, you can
+    <a href="${url}" target="_blank" rel="noopener noreferrer">download it</a>
+    and watch it with your favorite video player!
+  </video>`;
+  });
 
-  let nearest_expiry_time: string | null = null
+  n2m.setCustomTransformer("audio", async (block) => {
+    const { audio } = block as AudioBlockObjectResponse
+    const url = audio.type === 'external' ? audio.external.url : audio.file.url
+    return `<audio src="${url}" controls>
+    <a href="${url}" target="_blank" rel="noopener noreferrer">Download the audio.</a>.
+  </audio>`
+  });
+
+  let nearest_expiry_time: string | null = null;
   const mdblocks = await n2m.pageToMarkdown(page.id);
-  const page_expiry_time = getExpiryTime(mdblocks)
-  if (page_expiry_time) nearest_expiry_time = page_expiry_time
+  const page_expiry_time = getExpiryTime(mdblocks);
+  if (page_expiry_time) nearest_expiry_time = page_expiry_time;
   const mdString = n2m.toMarkdownString(mdblocks);
   page.properties.Name;
   const title = getPageTitle(page);
@@ -101,12 +126,13 @@ export async function renderPage(page: PageObjectResponse, notion: Client) {
     // update nearest_expiry_time
     if (expiry_time) {
       if (nearest_expiry_time) {
-        nearest_expiry_time = expiry_time < nearest_expiry_time ? expiry_time : nearest_expiry_time
+        nearest_expiry_time =
+          expiry_time < nearest_expiry_time ? expiry_time : nearest_expiry_time;
       } else {
-        nearest_expiry_time = expiry_time
+        nearest_expiry_time = expiry_time;
       }
     }
-  } 
+  }
 
   // map page properties to front matter
   for (const property in page.properties) {
@@ -207,11 +233,9 @@ export async function renderPage(page: PageObjectResponse, notion: Client) {
   frontMatter.NOTION_METADATA = page;
 
   // save update time
-  frontMatter.UPDATE_TIME = (new Date()).toISOString()
+  frontMatter.UPDATE_TIME = new Date().toISOString();
   // save nearest expiry time
-  if (nearest_expiry_time) frontMatter.EXPIRY_TIME = nearest_expiry_time
- 
-
+  if (nearest_expiry_time) frontMatter.EXPIRY_TIME = nearest_expiry_time;
 
   return {
     title,
@@ -222,7 +246,8 @@ export async function renderPage(page: PageObjectResponse, notion: Client) {
         defaultKeyType: "PLAIN",
       }) +
       "\n---\n" +
-      frontInjectString + '\n' +
+      frontInjectString +
+      "\n" +
       mdString,
   };
 }
@@ -241,7 +266,10 @@ export async function savePage(
   if (post) {
     const metadata = post.metadata;
     // if the page is not modified, continue
-    if (post.expiry_time == null && metadata.last_edited_time === page.last_edited_time) {
+    if (
+      post.expiry_time == null &&
+      metadata.last_edited_time === page.last_edited_time
+    ) {
       console.info(`[Info] The post ${postpath} is up-to-date, skipped.`);
       return;
     }
@@ -251,9 +279,6 @@ export async function savePage(
 
   const { title, pageString } = await renderPage(page, notion);
   const fileName = getFileName(title, page.id);
-  await sh(
-    `hugo new "${mount.target_folder}/${fileName}"`,
-    false
-  );
+  await sh(`hugo new "${mount.target_folder}/${fileName}"`, false);
   fs.writeFileSync(`content/${mount.target_folder}/${fileName}`, pageString);
 }

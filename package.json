@@ -19,7 +19,8 @@
     "start": "ts-node src/index.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
-    "format": "prettier --write src/**/*.ts"
+    "format": "prettier --write src/**/*.ts",
+    "serve": "hugo server --environment DoIt"
   },
   "keywords": [
     "Notion",
