@@ -67,7 +67,7 @@ jobs:
         run: |
           npm install
           npm start
-          hugo --config DoIt
+          hugo --environment DoIt
 
       # - name: Commit updated content
       #   uses: stefanzweifel/git-auto-commit-action@v4
