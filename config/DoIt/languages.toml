@@ -56,7 +56,7 @@
       name = "Showcase"
       url = "/showcase/"
       title = ""
-      weight = 6
+      weight = 5
     [[en.menu.main]]
       identifier = "about"
       pre = ""
@@ -64,16 +64,16 @@
       name = "About"
       url = "/about/"
       title = ""
-      weight = 8
+      weight = 6
   [en.params]
     # site description
     description = "The official documentation for the Hugo DoIt theme"
     # site keywords
-    keywords = ["Theme", "Hugo"]
+    keywords = ["Blog"]
     # App icon config
     [en.params.app]
       # optional site title override for the app when added to an iOS home screen or Android launcher
-      title = "DoIt"
+      title = "Planet Cloud"
       # whether to omit favicon resource links
       noFavicon = false
       # modern SVG favicon to use in place of older style .png and .ico files
