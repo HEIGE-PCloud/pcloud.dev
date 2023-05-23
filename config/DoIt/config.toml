@@ -1,4 +1,4 @@
-baseURL = "https://hugodoit.pages.dev"
+baseURL = "https://pcloud.dev"
 # [en, zh-cn, fr, pl, ...] determines default content language
 # [en, zh-cn, fr, pl, ...] 设置默认的语言
 defaultContentLanguage = "en"
@@ -8,7 +8,7 @@ theme = "DoIt"
 
 # website title
 # 网站标题
-title = "DoIt"
+title = "Planet Cloud"
 
 # whether to use robots.txt
 # 是否使用 robots.txt
