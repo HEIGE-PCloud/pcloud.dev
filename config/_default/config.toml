@@ -1,4 +1,4 @@
-baseURL = "https://pcloud.dev/"
-languageCode = "en-gb"
-title = "Planet Cloud"
-theme = "DoIt"
+baseURL = "https://example.org/"
+languageCode = "en-us"
+title = "My New Hugo Site"
+theme = "ananke"
