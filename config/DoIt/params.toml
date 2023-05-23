@@ -265,173 +265,34 @@ fullscreen = true
 # Social share links in post page
 # 文章页面的分享信息设置
 [page.share]
-Baidu = false
-Blogger = false
-Buffer = false
-Digg = false
-Evernote = false
 Facebook = true
-Flipboard = false
 HackerNews = true
-Instapaper = false
 Line = true
-Linkedin = false
-Mix = false
-Myspace = false
-Odnoklassniki = false
-Pinterest = false
-Pocket = false
-Reddit = false
-Renren = false
-Skype = false
-Stumbleupon = false
+Linkedin = true
+Skype = true
 Telegram = true
-Trello = false
-Tumblr = false
 Twitter = true
-VK = false
-Weibo = true
-Whatsapp = false
-Xing = false
+Whatsapp = true
 enable = true
 # Comment config
 # 评论系统设置
 [page.comment]
 enable = true
-# Disqus comment config (https://disqus.com/)
-# Disqus 评论系统设置 (https://disqus.com/)
-[page.comment.disqus]
-enable = false
-# Disqus shortname to use Disqus in posts
-# Disqus 的 shortname，用来在文章中启用 Disqus 评论系统
-shortname = ""
-# Gitalk comment config (https://github.com/gitalk/gitalk)
-# Gitalk 评论系统设置 (https://github.com/gitalk/gitalk)
-[page.comment.gitalk]
-clientId = ""
-clientSecret = ""
-enable = false
-owner = ""
-repo = ""
-# Valine comment config (https://github.com/xCss/Valine)
-# Valine 评论系统设置 (https://github.com/xCss/Valine)
-[page.comment.valine]
-appId = ""
-appKey = ""
-avatar = "mp"
-enable = false
-enableQQ = false
-highlight = true
-lang = "en"
-meta = ""
-pageSize = 10
-placeholder = ""
-recordIP = false
-serverURLs = ""
-visitor = true
-# emoji data file name, default is "google.yml"
-# ("apple.yml", "google.yml", "facebook.yml", "twitter.yml")
-# located in "themes/DoIt/assets/data/emoji/" directory
-# you can store your own data files in the same path under your project:
-# "assets/data/emoji/"
-# emoji 数据文件名称, 默认是 "google.yml"
-# ("apple.yml", "google.yml", "facebook.yml", "twitter.yml")
-# 位于 "themes/DoIt/assets/data/emoji/" 目录
-# 可以在你的项目下相同路径存放你自己的数据文件:
-# "assets/data/emoji/"
-emoji = ""
-# Waline comment config (https://waline.js.org)
-# Waline 评论系统设置 (https://waline.js.org)
-[page.comment.waline]
-comment = true
-enable = false
-pageview = true
-serverURL = "https://do-it-waline-comment.vercel.app"
-# emoji = ['https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo']
-# meta = ['nick', 'mail', 'link']
-# requiredMeta = []
-# login = 'enable'
-# wordLimit = 0
-# pageSize = 10
-# imageUploader = false
-# highlighter = false
-# texRenderer = false
-# Facebook comment config (https://developers.facebook.com/docs/plugins/comments)
-# Facebook 评论系统设置 (https://developers.facebook.com/docs/plugins/comments)
-[page.comment.facebook]
-appId = ""
-enable = false
-languageCode = ""
-numPosts = 10
-width = "100%"
-# Telegram comments config (https://comments.app/)
-# Telegram comments 评论系统设置 (https://comments.app/)
-[page.comment.telegram]
-color = ""
-colorful = true
-dark = false
-dislikes = false
-enable = false
-height = ""
-limit = 5
-outlined = false
-siteID = ""
-# Commento comment config (https://commento.io/)
-# Commento comment 评论系统设置 (https://commento.io/)
-[page.comment.commento]
-enable = false
-# Utterances comment config (https://utteranc.es/)
-# Utterances comment 评论系统设置 (https://utteranc.es/)
-[page.comment.utterances]
-enable = false
-# owner/repo
-darkTheme = "github-dark"
-issueTerm = "pathname"
-label = ""
-lightTheme = "github-light"
-repo = ""
-# Twikoo comment config (https://twikoo.js.org/)
-# Twikoo comment 评论系统设置 (https://twikoo.js.org/)
-[page.comment.twikoo]
-commentCount = true
-enable = true
-envId = "https://doit-docs-comment-twikoo.vercel.app/"
-path = ""
-region = ""
-visitor = true
-# Vssue comment config (https://vssue.js.org//)
-# Vssue comment 评论系统设置 (https://vssue.js.org//)
-[page.comment.vssue]
-clientId = "" 
-clientSecret = "" 
-enable = false 
-owner = "" 
-platform = "" # ("bitbucket", "gitea", "gitee", "github", "gitlab")
-repo = "" 
-# Remark42 comment config (https://remark42.com/)
-# Remark42 comment 评论系统设置 (https://remark42.com/)
-[page.comment.remark42]
-enable = false
-host = ""
-max_shown_comments = 15
-show_email_subscription = true
-simple_view = false
-site_id = ""
 # giscus comment config (https://giscus.app/)
 # giscus comment 评论系统设置 (https://giscus.app/)
 [page.comment.giscus]
 enable = false
 # owner/repo
 darkTheme = "dark"
-dataCategory = ""
-dataCategoryId = ""
+dataCategory = "Comments"
+dataCategoryId = "DIC_kwDOJmg7184CWreH"
 dataEmitMetadata = "0"
 dataInputPosition = "bottom"
 dataLang = "en"
 dataMapping = "pathname"
 dataReactionsEnabled = "1"
-dataRepo = ""
-dataRepoId = ""
+dataRepo = "HEIGE-PCloud/pcloud.dev"
+dataRepoId = "R_kgDOJmg71w"
 dataStrict = "0"
 lightTheme = "light"
 # Third-party library config
@@ -502,7 +363,7 @@ duration = -1
 [verification]
 baidu = ""
 bing = ""
-google = "MQ8DNu27ayX6B_4ObiEDK09vGr1fdy7kOAnbd09hJk4"
+google = ""
 pinterest = ""
 so = ""
 sogou = ""
