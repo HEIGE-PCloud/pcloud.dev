@@ -7,9 +7,10 @@ import {
 } from "@notionhq/client";
 import {
   AudioBlockObjectResponse,
+  CodeBlockObjectResponse,
   EquationBlockObjectResponse,
-  GetPageResponse,
   PageObjectResponse,
+  RichTextItemResponse,
   VideoBlockObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import { NotionToMarkdown } from "@pclouddev/notion-to-markdown";
@@ -67,6 +68,54 @@ export async function renderPage(page: PageObjectResponse, notion: Client) {
         const { equation } = block as EquationBlockObjectResponse;
         return `{{< math >}}\\[${equation}\\]{{< /math >}}`;
       });
+      n2m.setCustomRichTextTransformer(
+        (textArray: RichTextItemResponse[], plain = false) => {
+          if (plain) {
+            return textArray
+              .map((text) => {
+                return text.plain_text;
+              })
+              .join("");
+          }
+          const inlineCode = (text: string) => {
+            return `\`${text}\``;
+          };
+
+          const bold = (text: string) => {
+            return `**${text}**`;
+          };
+
+          const italic = (text: string) => {
+            return `_${text}_`;
+          };
+
+          const strikethrough = (text: string) => {
+            return `~~${text}~~`;
+          };
+
+          const underline = (text: string) => {
+            return `<u>${text}</u>`;
+          };
+          return textArray
+            .map((text) => {
+              if (text.type === "text") {
+                const annotations = text.annotations;
+                let content = text.text.content;
+                if (annotations.bold) content = bold(content);
+                if (annotations.code) content = inlineCode(content);
+                if (annotations.italic) content = italic(content);
+                if (annotations.strikethrough) content = strikethrough(content);
+                if (annotations.underline) content = underline(content);
+                return content;
+              } else if (text.type === "equation") {
+                return `{{< math >}}\\(${text.equation.expression}\\){{< /math >}}`;
+              } else {
+                // TODO
+              }
+            })
+            .join("");
+        }
+      );
       break;
     case "html":
       n2m.setCustomTransformer("equation", async (block) => {
@@ -94,11 +143,30 @@ export async function renderPage(page: PageObjectResponse, notion: Client) {
   });
 
   n2m.setCustomTransformer("audio", async (block) => {
-    const { audio } = block as AudioBlockObjectResponse
-    const url = audio.type === 'external' ? audio.external.url : audio.file.url
+    const { audio } = block as AudioBlockObjectResponse;
+    const url = audio.type === "external" ? audio.external.url : audio.file.url;
     return `<audio src="${url}" controls>
     <a href="${url}" target="_blank" rel="noopener noreferrer">Download the audio.</a>.
-  </audio>`
+  </audio>`;
+  });
+  const codeBlock = (text: string, language?: string) => {
+    if (language === "plain text") language = "text";
+
+    return `\`\`\`${language}
+  ${text}
+  \`\`\``;
+  };
+
+  n2m.setCustomTransformer("code", async (block) => {
+    const { code } = block as CodeBlockObjectResponse;
+    const plainCode = code.rich_text.map((text) => text.plain_text).join("");
+    if (code.language === "plain text") {
+      return codeBlock(plainCode, "text");
+    }
+    if (code.language === "mermaid") {
+      return `{{< mermaid >}}${plainCode}{{< /mermaid >}}`;
+    }
+    return codeBlock(plainCode, code.language);
   });
 
   let nearest_expiry_time: string | null = null;

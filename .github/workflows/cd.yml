@@ -6,7 +6,7 @@ on:
       - 'main'
 
   schedule:
-    - cron: '0 * * * *' # run every hour
+    - cron: '0 1 * * *' # run every day at 01:00
   workflow_dispatch:
     
 
