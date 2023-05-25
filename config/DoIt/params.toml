@@ -279,7 +279,7 @@ enable = true
 # giscus comment config (https://giscus.app/)
 # giscus comment 评论系统设置 (https://giscus.app/)
 [page.comment.giscus]
-enable = false
+enable = true
 # owner/repo
 darkTheme = "dark"
 dataCategory = "Comments"
